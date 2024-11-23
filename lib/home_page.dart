@@ -1,5 +1,8 @@
+import 'package:crud_perpustakaan/insert.dart';
+import 'package:crud_perpustakaan/update.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'delete.dart';
 
 class BookListPage extends StatefulWidget {
   const BookListPage({super.key});
@@ -34,6 +37,7 @@ class _BookListPageState extends State<BookListPage> {
           'Daftar Buku',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.pink[100],
         centerTitle: true,
         actions: [
           IconButton(
@@ -81,14 +85,14 @@ class _BookListPageState extends State<BookListPage> {
                         icon: const Icon(Icons.edit, color: Colors.blue),
                         onPressed: () {
                           // arahkan ke halaman EditBookPage dengan mengirimkan route
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: (context) => EditBookPage(book: book),
-                          //   ),
-                          // ).then((_) {
-                          //   fetchBooks(); // refresh data setelah kembali dari halaman edit
-                          // });
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EditBookPage(book: book),
+                            ),
+                          ).then((_) {
+                            fetchBooks(); // refresh data setelah kembali dari halaman edit
+                          });
                         },
                       ),
                       // tombol delete
@@ -112,8 +116,9 @@ class _BookListPageState extends State<BookListPage> {
                                   ),
                                   TextButton(
                                     onPressed: () async {
-                                      // await deleteBook(book['id']);
+                                      await deleteBook(book['id']);
                                       Navigator.of(context).pop();
+                                      await fetchBooks();
                                     },
                                     child: const Text('Delete'),
                                   ),
@@ -128,6 +133,19 @@ class _BookListPageState extends State<BookListPage> {
                 );
               },
             ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigasi ke halaman AddBookPage
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddBookPage()),
+          ).then((_) {
+            fetchBooks(); // Refresh data setelah kembali dari halaman AddBookPage
+          });
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.pink[200],
+      ),
     );
   }
 }
